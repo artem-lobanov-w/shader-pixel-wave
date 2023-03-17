@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset='utf-8'>
+    <meta http-equiv='X-UA-Compatible' content='IE=edge'>
+    <title>Page Title</title>
+    <meta name='viewport' content='width=device-width, initial-scale=1'>
+</head>
+
+<body>
+    <style>
+        body { margin: 0; overflow: hidden; }
+    </style>
+    <script id="fragShader" type="shader-code">
+        #ifdef GL_ES
+        precision mediump float;
+        #endif
+
+        #define LIM 3
+
+        uniform vec2 res;
+        uniform vec3 mouse;
+        uniform float u_time;
+        uniform float sizeGrid;
+        uniform float radius;
+        uniform vec3 random;
+        uniform vec3 color;
+
+        void main(){
+            vec3 color = color.xyz;
+            vec3 random = random.xyz;
+
+            //Размер сетки
+            float dimension = sizeGrid/10.0;
+            float dimension2 = sizeGrid;
+
+            //Относительный радиус
+            float radius = floor(u_time/dimension);
+
+            //Координаты клетки
+            vec2 stf = floor(gl_FragCoord.xy/dimension);
+            
+            //Координаты курсора
+            vec2 m = mouse.xy;
+            m = floor(m/dimension);
+
+            //Дистанция от курсора до пикселя 
+            float dist = distance(m,stf);
+
+            //Коэффициент
+            float distFacktor = smoothstep(radius-4.0,radius,dist);
+            if (dist<radius) {
+                color = mix(random,color,distFacktor);
+            }
+
+            //Линии сетки
+            float gfcx = gl_FragCoord.x;
+            float ostx = mod(gfcx,dimension);
+            float gfcy = gl_FragCoord.y;
+            float osty = mod(gfcy,dimension);
+
+            if(ostx<1.0 || osty<1.0) {
+                color *= vec3(0.5);
+            }
+
+            ostx = mod(gfcx,dimension2);
+            osty = mod(gfcy,dimension2);
+
+            if(ostx<2.0 || osty<2.0) {
+                color *= vec3(0.0);
+            }
+            gl_FragColor = vec4(color,1.0);
+        }
+    </script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r71/three.min.js"></script>
+    <script src="./js/js.js"></script>
+</body>
+
+</html>
