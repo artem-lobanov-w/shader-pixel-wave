@@ -53,6 +53,10 @@
                 color = mix(random,color,distFacktor);
             }
 
+            if (dist==radius) {
+                color = mix(random,color,distFacktor);
+            }
+
             //Линии сетки
             float gfcx = gl_FragCoord.x;
             float ostx = mod(gfcx,dimension);

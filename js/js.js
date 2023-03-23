@@ -105,6 +105,10 @@ let bgColor1 = Math.random();
 let bgColor2 = Math.random();
 let bgColor3 = Math.random();
 
+uniforms.color.value.x = bgColor1;
+uniforms.color.value.y = bgColor2;
+uniforms.color.value.z = bgColor3;
+
 
 let randomColor1 = Math.random();
 let randomColor2 = Math.random();
